@@ -92,7 +92,7 @@ class dateConversion {
         long numberOfDays;
         String convertedDate = "";
         
-        numberOfDays = 157547; // 791
+        numberOfDays = 157547;
 
         convertedDate = returnCountYears(numberOfDays);
         
@@ -100,4 +100,4 @@ class dateConversion {
      
         } 
                            
-} // End of class Numbers
+} // End of class
