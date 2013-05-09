@@ -1,11 +1,12 @@
-class dateConversion { 
+public class DateBackwardCounter { 
     
-  
-    final static long DAYSINYEAR = 365;
-    final long DAYSINLEAPYEAR = 366;
+        final static long DAYSINYEAR = 365;
+        final long DAYSINLEAPYEAR = 366;
+        final static long EPOCHYEAR = 1581;
     
     
-    static boolean isLeapYear (long year){ 
+    
+        static boolean isLeapYear (long year){ 
         boolean answer = false; 
         
         if (year %4 == 0 && (year %400 == 0 || year % 100 != 0)) 
@@ -16,7 +17,7 @@ class dateConversion {
         return answer; 
         } 
 
-    static int returnDaysInMonth (long month, long year) { 
+        static int returnDaysInMonth (long month, long year) { 
 
         int numberOfDays; 
         numberOfDays = 0; 
@@ -33,7 +34,7 @@ class dateConversion {
         return numberOfDays; 
     }    
     
-    static String returnMonthName (long month) {
+        static String returnMonthName (long month) {
            String monthName;
            monthName = "";
 
@@ -53,51 +54,76 @@ class dateConversion {
            return monthName;
     }
         
+        static long returnDaysInYear (long year) {
+        if (isLeapYear(year)) return 366;
+        else return 365;
+    }
     
+        static long returnYearsFromEpoch (long dayscount) {
+         
+            long epochYear = Numbers.EPOCHYEAR;         
+         
+            while (dayscount > returnDaysInYear(epochYear)) {
+                   dayscount -= returnDaysInYear(epochYear);
+             
+            epochYear += 1;
+            }
+            
+            return epochYear;
+    }
+
+        static String returnMonthReminder (long dayscount) {
     
-    static String returnCountYears (long dayscount){
-         
-         long epochYear = 1582;    
-         long monthCount = 1;
-         
-         String myDate = "";
-         
-         
-         while (dayscount > DAYSINYEAR) {
-             
-             if (isLeapYear(epochYear) ) dayscount -= 366;
-             else dayscount -= 365;
-             
-             epochYear += 1;
-             
-         }
-                  
-         while (dayscount > returnDaysInMonth(monthCount, epochYear) ) {
-             
-                dayscount -= returnDaysInMonth (monthCount, epochYear);
-             
-                 monthCount += 1;
-         }
-         
-         myDate = returnMonthName(monthCount) + " " + dayscount + ", " + epochYear;
+            long monthCounter = 1;
+            long yearCounter = Numbers.EPOCHYEAR;
+            
+            while (dayscount > returnDaysInMonth(monthCounter, yearCounter)) {
                 
-         return myDate;
-         
-     }
+                dayscount -= returnDaysInMonth(monthCounter, yearCounter);
+                monthCounter += 1;
+                
+                
+                if (monthCounter > 12) {
+                    monthCounter = 1;
+                    yearCounter += 1;
+                }
+                
+            }
+            
+            return returnMonthName(monthCounter);
+    }
+    
+        static long returnDaysReminder (long dayscount) {
+    
+            long monthCounter = 1;
+            long yearCounter = Numbers.EPOCHYEAR;            
+            
+            while (dayscount > returnDaysInMonth(monthCounter, yearCounter)) {
+                
+                dayscount -= returnDaysInMonth(monthCounter, yearCounter);
+                monthCounter += 1;
+                
+                
+                if (monthCounter > 12) {
+                    monthCounter = 1;
+                    yearCounter += 1;
+                }
+                
+            }
+            
+            return dayscount;
+    }
+    
      
-     
-     
-        public static void main(String[] args) { 
+    public static void main(String[] args) { 
+            
          
         long numberOfDays;
-        String convertedDate = "";
         
-        numberOfDays = 157547;
-
-        convertedDate = returnCountYears(numberOfDays);
-        
-        System.out.println(convertedDate); 
+        numberOfDays = 157914; // 791
      
-        } 
+        System.out.println("It is " + returnMonthReminder(numberOfDays) + " " + returnDaysReminder(numberOfDays)+ ", " + returnYearsFromEpoch(numberOfDays)); 
+     
+    } 
                            
-} // End of class
+} // End of class Numbers
