@@ -19,23 +19,23 @@ class DateCounter {
         
         int returnDaysInMonth (int month, long year) { 
 
-        int numberOfDays; 
-        numberOfDays = 0; 
+        int localNumberOfDays; 
+        localNumberOfDays = 0; 
         
         switch (month) {
             case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                numberOfDays = 31;
+                localNumberOfDays = 31;
                 break;
             case 4: case 6: case 9: case 11:
-                numberOfDays = 30;
+                localNumberOfDays = 30;
                 break;
             case 2:
-                if (isLeapYear(year) && month == 2) numberOfDays = 29;
-                else numberOfDays = 28;
+                if (isLeapYear(year) && month == 2) localNumberOfDays = 29;
+                else localNumberOfDays = 28;
                 break;
         }
         
-        return numberOfDays; 
+        return localNumberOfDays; 
         }    
         
     
@@ -70,10 +70,11 @@ class DateCounter {
         long returnYears () {
   
             long yearCount = EPOCHYEAR;
+            long localNumberOfDays = numberOfDays;
             
-            while (numberOfDays >= returnDaysInYear(yearCount)) {
+            while (localNumberOfDays >= returnDaysInYear(yearCount)) {
                    
-                   numberOfDays -= returnDaysInYear(yearCount);
+                   localNumberOfDays -= returnDaysInYear(yearCount);
                    yearCount += 1;
             }
             
@@ -84,10 +85,11 @@ class DateCounter {
     
             int monthCounter = 1;
             long yearCounter = EPOCHYEAR;
+            long localNumberOfDays = numberOfDays;
             
-            while (numberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
+            while (localNumberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
                 
-                numberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
+                localNumberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
                 monthCounter ++;
                 
                 
@@ -104,11 +106,12 @@ class DateCounter {
         long returnDaysReminder () {
     
             int monthCounter = 1;
-            long yearCounter = EPOCHYEAR;            
+            long yearCounter = EPOCHYEAR;    
+            long localNumberOfDays = numberOfDays;
             
-            while (numberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
+            while (localNumberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
                 
-                numberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
+                localNumberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
                 monthCounter ++;
                 
                 
@@ -119,7 +122,7 @@ class DateCounter {
                 
             }
             
-            return numberOfDays;
+            return localNumberOfDays;
     }
                            
 } // End of class DateCounter
@@ -132,7 +135,7 @@ public class DateDriver {
         long numberOfDays;
         DateCounter mydate = null;
         
-        numberOfDays = 157920; // Try 791
+        numberOfDays = 157919; // Try 791
               mydate = new DateCounter(numberOfDays);
                 
      
