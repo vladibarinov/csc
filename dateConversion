@@ -1,40 +1,45 @@
-public class DateBackwardCounter { 
+class DateCounter { 
     
-        final static long DAYSINYEAR = 365;
-        final long DAYSINLEAPYEAR = 366;
-        final static long EPOCHYEAR = 1581;
-    
-    
-    
-        static boolean isLeapYear (long year){ 
-        boolean answer = false; 
+        long numberOfDays;
+        final private long EPOCHYEAR = 1581;
         
-        if (year %4 == 0 && (year %400 == 0 || year % 100 != 0)) 
-            answer = true; 
-        else 
-            answer = false; 
+    
+        DateCounter() {}
         
-        return answer; 
+        DateCounter (long inNumberOfDays) {
+            numberOfDays = inNumberOfDays;
+        }
+        
+    
+        boolean isLeapYear (long year){ 
+            
+            return (year %4 == 0 && (year %400 == 0 || year % 100 != 0)) ? true : false ;
         } 
 
-        static int returnDaysInMonth (long month, long year) { 
+        
+        int returnDaysInMonth (int month, long year) { 
 
         int numberOfDays; 
         numberOfDays = 0; 
         
-        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) 
-            return 31; 
-
-        else if (month == 4 || month == 6 || month == 9 || month == 11) 
-            return 30; 
-        
-        else if (isLeapYear(year) && month == 2) return 29; 
-        else if ( !isLeapYear(year) && month == 2) return 28; 
+        switch (month) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                numberOfDays = 31;
+                break;
+            case 4: case 6: case 9: case 11:
+                numberOfDays = 30;
+                break;
+            case 2:
+                if (isLeapYear(year) && month == 2) numberOfDays = 29;
+                else numberOfDays = 28;
+                break;
+        }
         
         return numberOfDays; 
-    }    
+        }    
+        
     
-        static String returnMonthName (long month) {
+        String returnMonthName (long month) {
            String monthName;
            monthName = "";
 
@@ -54,76 +59,85 @@ public class DateBackwardCounter {
            return monthName;
     }
         
-        static long returnDaysInYear (long year) {
-        if (isLeapYear(year)) return 366;
-        else return 365;
-    }
+        
+        long returnDaysInYear (long year) {
+            
+            return (isLeapYear(year)) ? 366 : 365;
+        }
     
-        static long returnYearsFromEpoch (long dayscount) {
-         
-            long epochYear = Numbers.EPOCHYEAR;         
-         
-            while (dayscount > returnDaysInYear(epochYear)) {
-                   dayscount -= returnDaysInYear(epochYear);
-             
-            epochYear += 1;
+        
+        
+        long returnYears () {
+  
+            long yearCount = EPOCHYEAR;
+            
+            while (numberOfDays >= returnDaysInYear(yearCount)) {
+                   
+                   numberOfDays -= returnDaysInYear(yearCount);
+                   yearCount += 1;
             }
             
-            return epochYear;
-    }
+            return yearCount;
+        }
 
-        static String returnMonthReminder (long dayscount) {
+        String returnMonthReminder () {
     
-            long monthCounter = 1;
-            long yearCounter = Numbers.EPOCHYEAR;
+            int monthCounter = 1;
+            long yearCounter = EPOCHYEAR;
             
-            while (dayscount > returnDaysInMonth(monthCounter, yearCounter)) {
+            while (numberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
                 
-                dayscount -= returnDaysInMonth(monthCounter, yearCounter);
-                monthCounter += 1;
+                numberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
+                monthCounter ++;
                 
                 
                 if (monthCounter > 12) {
                     monthCounter = 1;
-                    yearCounter += 1;
+                    yearCounter ++;
                 }
                 
             }
             
             return returnMonthName(monthCounter);
-    }
+        }
     
-        static long returnDaysReminder (long dayscount) {
+        long returnDaysReminder () {
     
-            long monthCounter = 1;
-            long yearCounter = Numbers.EPOCHYEAR;            
+            int monthCounter = 1;
+            long yearCounter = EPOCHYEAR;            
             
-            while (dayscount > returnDaysInMonth(monthCounter, yearCounter)) {
+            while (numberOfDays > returnDaysInMonth(monthCounter, yearCounter)) {
                 
-                dayscount -= returnDaysInMonth(monthCounter, yearCounter);
-                monthCounter += 1;
+                numberOfDays -= returnDaysInMonth(monthCounter, yearCounter);
+                monthCounter ++;
                 
                 
                 if (monthCounter > 12) {
                     monthCounter = 1;
-                    yearCounter += 1;
+                    yearCounter ++;
                 }
                 
             }
             
-            return dayscount;
+            return numberOfDays;
     }
+                           
+} // End of class DateCounter
+
+
+public class DateDriver {
     
-     
-    public static void main(String[] args) { 
-            
+        public static void main(String[] args) { 
          
         long numberOfDays;
+        DateCounter mydate = null;
         
-        numberOfDays = 157914; // 791
+        numberOfDays = 157920; // Try 791
+              mydate = new DateCounter(numberOfDays);
+                
      
-        System.out.println("It is " + returnMonthReminder(numberOfDays) + " " + returnDaysReminder(numberOfDays)+ ", " + returnYearsFromEpoch(numberOfDays)); 
+        System.out.println("It is " + mydate.returnMonthReminder() + " " + mydate.returnDaysReminder() + ", " + mydate.returnYears() ); 
      
     } 
-                           
-} // End of class Numbers
+
+}
