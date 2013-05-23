@@ -1,23 +1,108 @@
-class DateCounter { 
+import java.util.Scanner;
+
+class Utility {
     
-        long numberOfDays;
-        final private long EPOCHYEAR = 1581;
+        public static long queryForLong (String prompt) {
+            
+            Scanner input;
+            long theNumber;
         
+            input = new Scanner(System.in);
+            System.out.println(prompt);
+            theNumber = input.nextLong();    
+            
+            return theNumber;
+       }
+        
+        public static int queryForInteger (String prompt) {
+            
+            Scanner input;
+            int theNumber;
+        
+            input = new Scanner(System.in);
+            System.out.println(prompt);
+            theNumber = input.nextInt();    
+            
+            return theNumber;
+       }
+}
+
+class Date { 
     
-        DateCounter() {}
+        final private long EPOCHYEAR = 1501;
         
-        DateCounter (long inNumberOfDays) {
-            numberOfDays = inNumberOfDays;
+        private long numberOfDays;
+        
+        private long julianYear;
+        private int  julianMonth;
+        private long julianDay;
+        private long julianDate;
+    
+        final public static int JAN = 1;
+        final public static int FEB = 2;
+        final public static int MAR = 3;
+        final public static int APR = 4;
+        final public static int MAY = 5;
+        final public static int JUN = 6;
+        final public static int JUL = 7;
+        final public static int AUG = 8;
+        final public static int SEP = 9;
+        final public static int OCT = 10;
+        final public static int NOV = 11;
+        final public static int DEC = 12;
+        
+        
+        // CONSTRUCTORS //
+       
+        Date() {
+            
+              julianYear = Utility.queryForLong("1501 — _____ enter Year?");
+              julianMonth = Utility.queryForInteger("Enter Month?");
+              julianDay = Utility.queryForLong("Enter Day?");
+              
+              setJulianEpochDate(julianDay, julianMonth, julianYear);
+              
         }
         
+        Date(long inNumberOfDays) {
+              
+            numberOfDays = inNumberOfDays; 
+        
+        }
     
+        
+        // ACCESSOR & MUTATOR //
+        
+        public void setJulianEpochDate (long julianDay, int julianMonth, long julianYear){
+            
+            if ((julianYear >= EPOCHYEAR) && 
+                (julianMonth >= JAN && julianMonth <= DEC) && 
+                (julianDay >= 1 && julianDay <= returnDaysInMonth(julianMonth, julianYear)) ) {
+            
+                julianDate = returnJulianDays(julianDay, julianMonth, julianYear);
+            
+            }
+            
+            else System.out.println("+++ ERROR! CHECK IF DATA YOU'VE ENTERED IS CORRECT +++");    
+        
+        }
+        
+        long getJulianDate() { 
+            
+            return julianDate;
+            
+        } 
+        
+        
+        // TOOLBOX //
+        
         boolean isLeapYear (long year){ 
             
             return (year %4 == 0 && (year %400 == 0 || year % 100 != 0)) ? true : false ;
+            
         } 
 
-        
-        int returnDaysInMonth (int month, long year) { 
+        long returnDaysInMonth (int month, long year) { 
 
         int localNumberOfDays; 
         localNumberOfDays = 0; 
@@ -37,37 +122,38 @@ class DateCounter {
         
         return localNumberOfDays; 
         }    
-        
     
-        String returnMonthName (long month) {
+        String returnMonthName (int month) {
+           
            String monthName;
            monthName = "";
 
-           if (month == 1) monthName = "January" ;
-           else if (month == 2) monthName = "February";
-           else if (month == 3) monthName = "March";
-           else if (month == 4) monthName = "April";
-           else if (month == 5) monthName = "May";
-           else if (month == 6) monthName = "June";
-           else if (month == 7) monthName = "July";
-           else if (month == 8) monthName = "August";
-           else if (month == 9) monthName = "September";
-           else if (month == 10) monthName = "October";
-           else if (month == 11) monthName = "November";
-           else if (month == 12) monthName = "December";
-
+           switch (month){
+               case JAN: monthName = "January"; break;
+               case FEB: monthName = "February"; break;
+               case MAR: monthName = "March"; break;
+               case APR: monthName = "April"; break;
+               case MAY: monthName = "May"; break;
+               case JUN: monthName = "June"; break;
+               case JUL: monthName = "July"; break;
+               case AUG: monthName = "August"; break;
+               case SEP: monthName = "September"; break;
+               case OCT: monthName = "October"; break;
+               case NOV: monthName = "November"; break;
+               case DEC: monthName = "December"; break;
+           }
            return monthName;
-    }
-        
+        }
         
         long returnDaysInYear (long year) {
             
             return (isLeapYear(year)) ? 366 : 365;
         }
-    
         
         
-        long returnYears () {
+        // CONVERTED JULIANDATE
+        
+        long returnYear () {
   
             long yearCount = EPOCHYEAR;
             long localNumberOfDays = numberOfDays;
@@ -81,7 +167,7 @@ class DateCounter {
             return yearCount;
         }
 
-        String returnMonthReminder () {
+        String returnMonth() {
     
             int monthCounter = 1;
             long yearCounter = EPOCHYEAR;
@@ -93,8 +179,8 @@ class DateCounter {
                 monthCounter ++;
                 
                 
-                if (monthCounter > 12) {
-                    monthCounter = 1;
+                if (monthCounter > DEC) {
+                    monthCounter = JAN;
                     yearCounter ++;
                 }
                 
@@ -103,7 +189,7 @@ class DateCounter {
             return returnMonthName(monthCounter);
         }
     
-        long returnDaysReminder () {
+        long returnDay () {
     
             int monthCounter = 1;
             long yearCounter = EPOCHYEAR;    
@@ -115,8 +201,8 @@ class DateCounter {
                 monthCounter ++;
                 
                 
-                if (monthCounter > 12) {
-                    monthCounter = 1;
+                if (monthCounter > DEC) {
+                    monthCounter = JAN;
                     yearCounter ++;
                 }
                 
@@ -124,23 +210,84 @@ class DateCounter {
             
             return localNumberOfDays;
     }
-                           
-} // End of class DateCounter
+        
+        String returnDate() {
+            
+            String returnDate;
 
+            returnDate = returnMonth() + " " +  returnDay() + ", " +  returnYear();
+        
+            return returnDate;
+        }    
+        
+        
+        // JULIAN DAYS FROM EPOCHDATE //
+        
+        long returnJulianDaysInYears (long year) {
+             
+            long yearCounter = EPOCHYEAR;
+            long daysInYearsCounter = 0;
+            
+            while (yearCounter < year) {
+                   
+                   daysInYearsCounter += returnDaysInYear(yearCounter);
+                   yearCounter += 1;
+            }
+                     
+            return daysInYearsCounter;
+ }
+        
+        long returnJulianDaysInMonths (long month, long year) {
+            
+            int monthCounter = JAN;
+            long daysInMonthsCounter = 0;
+            
+            while (monthCounter < month) {
+                   
+                   daysInMonthsCounter += returnDaysInMonth(monthCounter,year);
+                   monthCounter += 1;
+            }    
+            
+            return daysInMonthsCounter;
+        } 
+        
+        long returnJulianDays (long day, long month, long year){
+        
+            long julianDate = day;
+            
+            julianDate += returnJulianDaysInMonths(month, year) + returnJulianDaysInYears(year);
+            
+            return julianDate;
+        }
+        
+} // End of class Date
 
 public class DateDriver {
     
         public static void main(String[] args) { 
-         
-        long numberOfDays;
-        DateCounter mydate = null;
         
-        numberOfDays = 157919; // Try 791
-              mydate = new DateCounter(numberOfDays);
-                
-     
-        System.out.println("It is " + mydate.returnMonthReminder() + " " + mydate.returnDaysReminder() + ", " + mydate.returnYears() ); 
-     
-    } 
+       
+        long numberOfDays;
+
+        Date daysFromEpoch = null;
+        Date convertedJulian = null;
+        
+        
+        daysFromEpoch = new Date();
+             
+            System.out.println(" "); 
+            System.out.println("JulianDate is " + daysFromEpoch.getJulianDate());
+            System.out.println(" ");
+
+        
+        numberOfDays = Utility.queryForLong("Now enter Julian Date Number? (for example 187148) ");
+        
+        convertedJulian = new Date(numberOfDays);
+        
+        
+            System.out.println(" ");
+            System.out.println("Wow, it is " + convertedJulian.returnDate()); 
+
+        } 
 
 }
